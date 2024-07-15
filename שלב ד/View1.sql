@@ -1,36 +1,13 @@
--- Create view for original wing perspective
-CREATE VIEW OriginalWingView AS
-SELECT 
-    c.customerid, 
-    c.name, 
-    o.orderid, 
-    o.orderdate, 
-    o.deliverydate, 
-    o.status, 
-    p.productid, 
-    p.name AS product_name, 
-    p.category
-FROM 
-    CUSTOMERS c
-JOIN 
-    AIR_ORDER o ON c.customerid = o.customerid
-JOIN 
-    PART_OF po ON o.orderid = po.orderid
-JOIN 
-    PRODUCT p ON po.productid = p.productid;
+CREATE VIEW customers_view AS
+SELECT customerid, name, contactnumber, email, address, industrytype, accountmanagerid
+FROM CUSTOMERS;
 
--- Query 1: Retrieve all orders for a specific customer
-SELECT * FROM OriginalWingView WHERE customerid = 1;
+CREATE VIEW air_order_view AS
+SELECT orderid, orderdate, deliverydate, status, totalamount, customerid
+FROM AIR_ORDER;
 
--- Query 2: Retrieve all products ordered by a specific customer
-SELECT DISTINCT productid, product_name, category 
-FROM OriginalWingView 
-WHERE customerid = 1;
-
--- Query 3: Retrieve all orders with a specific status
-SELECT * FROM OriginalWingView WHERE status = 'Shipped';
-
--- Query 4: Retrieve all customers who ordered a specific product
-SELECT DISTINCT customerid, name 
-FROM OriginalWingView 
-WHERE productid = 1;
+-- Query 1: הצגת לקוחות שהזמינו בסכום מעל 1000
+SELECT c.customerid, c.name AS customer_name, o.orderid, o.totalamount
+FROM customers_view c
+JOIN air_order_view o ON c.customerid = o.customerid
+WHERE o.totalamount > 1000;
