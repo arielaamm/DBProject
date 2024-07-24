@@ -10,3 +10,9 @@ FROM ENGINEERS;
 SELECT p.project_id, p.project_name, e.engineer_id, e.first_name, e.last_name
 FROM projects_view p
 JOIN engineers_view e ON p.project_id = e.project_id
+
+-- Query 2: הצגת פרויקטים עם מהנדסים שנשכרו לאחר תאריך מסוים
+SELECT p.project_id, p.project_name, e.engineer_id, e.first_name, e.last_name, e.hire_date
+FROM projects_view p
+JOIN engineers_view e ON p.project_id = e.project_id
+WHERE e.hire_date > TO_DATE('2020-01-01', 'YYYY-MM-DD');
